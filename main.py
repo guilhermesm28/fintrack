@@ -8,30 +8,29 @@ st.set_page_config(
 )
 
 st.title("Planejamento Financeiro")
-st.write("Descreva abaixo suas receitas e despesas fixas para calcular o saldo mensal.")
 
 with st.expander("Dados"):
-    tabs = st.tabs(["Receitas, Despesas e Planejamento de gastos", "Detalhamento de gastos fixos"])
+    tabs = st.tabs(["Resumo", "Detalhes"])
     with tabs[0]:
-        col1, col2, col3, col4, col5 = st.columns(5)
+        col1, col2, col3, col4 = st.columns(4)
         with col1:
             receitas = st.number_input("Receitas", min_value=0.0, format="%.2f")
 
         with col2:
-            despesas = st.number_input("Despesas", min_value=0.0, format="%.2f")
-
-        with col3:
             gastos_fixos = st.number_input("Gastos Fixos (%)", min_value=0.0, value= 40.0, format="%.2f")
 
-        with col4:
+        with col3:
             gastos_livres = st.number_input("Gastos Livres (%)", min_value=0.0, value= 30.0, format="%.2f")
 
-        with col5:
+        with col4:
             investimentos = st.number_input("Investimentos (%)", min_value=0.0, value= 30.0, format="%.2f")
 
     with tabs[1]:
-        df_gastos_fixos = pd.DataFrame([{"Gasto": "Aluguel", "Valor": 1000.00}])
+        df_gastos_fixos = pd.DataFrame([{"Despesa": "Descreva a despesa", "Valor": 0.0},])
         df_gastos_fixos_edited = st.data_editor(df_gastos_fixos, width="stretch", hide_index=True, num_rows="dynamic")
+
+        if df_gastos_fixos_edited is not None:
+            despesas = df_gastos_fixos_edited["Valor"].sum()
 
 with st.container(border=True):
     col1, col2, col3 = st.columns(3)
