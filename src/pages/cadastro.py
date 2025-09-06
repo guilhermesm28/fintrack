@@ -1,16 +1,12 @@
 import streamlit as st
 import pandas as pd
 
-st.set_page_config(
-    page_title="FINTRACK",
-    page_icon="💲",
-    layout="wide",
-)
-
-st.title("Planejamento Financeiro")
+if not st.session_state.get("logged_in"):
+    st.error("⚠️ Você precisa estar logado para acessar esta página.")
+    st.stop()
 
 with st.expander("Dados"):
-    tabs = st.tabs(["Resumo", "Detalhes"])
+    tabs = st.tabs(["Receitas e planejamento", "Detalhamento de despesas"])
     with tabs[0]:
         col1, col2, col3, col4 = st.columns(4)
         with col1:
@@ -37,12 +33,12 @@ with st.container(border=True):
     with col1:
         st.metric("Total de receitas", f"R$ {receitas:.2f}")
         st.metric("Investimentos sugeridos", f"R$ {receitas * investimentos / 100:.2f}",
-                   help=f"R$ {receitas} * {investimentos}%")
+                help=f"R$ {receitas} * {investimentos}%")
     with col2:
         st.metric("Despesas fixas", f"R$ {despesas:.2f}")
         st.metric("Gastos fixos sugeridos", f"R$ {receitas * gastos_fixos / 100:.2f}",
-                   help=f"R$ {receitas} * {gastos_fixos}%")
+                help=f"R$ {receitas} * {gastos_fixos}%")
     with col3:
         st.metric("Saldo", f"R$ {receitas - despesas:.2f}")
         st.metric("Gastos livres sugeridos", f"R$ {receitas * gastos_livres / 100:.2f}",
-                   help=f"R$ {receitas} * {gastos_livres}%")
+                help=f"R$ {receitas} * {gastos_livres}%")
