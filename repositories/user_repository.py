@@ -1,6 +1,6 @@
 from sqlalchemy import select, func
-from models.user import User
-from services.database import get_session
+from models.user_model import User
+from utils.database_util import get_session
 
 def create_user(first_name, last_name, username, password_hash, is_admin=False):
     session = get_session()

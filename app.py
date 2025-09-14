@@ -1,5 +1,5 @@
 import streamlit as st
-from views import admin, login, planejamento
+from views import admin_view, login_view, planner_view
 
 st.set_page_config(
     page_title="FINTRACK",
@@ -7,16 +7,16 @@ st.set_page_config(
 )
 
 if not st.session_state.get("logged_in"):
-    login.render()
+    login_view.render()
 
 else:
     username = st.session_state.get("fullname")
     pages = {
-        "Planejamento": planejamento,
+        "Planejamento": planner_view,
     }
 
     if st.session_state.get("is_admin", False):
-        pages = {"Administração": admin, **pages}
+        pages = {"Administração": admin_view, **pages}
 
     st.title("📊 FINTRACK - Controle financeiro")
     tabs = st.tabs(list(pages.keys()))

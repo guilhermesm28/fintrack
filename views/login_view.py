@@ -1,5 +1,5 @@
 import streamlit as st
-from controllers.auth import login
+from controllers.user_controller import login
 
 def render():
     st.set_page_config(layout="centered")
@@ -13,4 +13,4 @@ def render():
             st.success("Logado com sucesso!")
             st.rerun()
         else:
-            st.error("Usuário ou senha incorretos.")
+            st.error("Usuário e/ou senha incorretos.")

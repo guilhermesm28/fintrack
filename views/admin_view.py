@@ -1,6 +1,6 @@
 from datetime import timedelta
 import streamlit as st
-from controllers import user
+from controllers import user_controller
 
 def render():
     st.set_page_config(layout="wide")
@@ -19,14 +19,14 @@ def render():
         submit = st.form_submit_button("Criar usuário")
         if submit:
             if first_name and last_name and username and password:
-                user.create_user(first_name, last_name, username, password, is_admin)
+                user_controller.create_user(first_name, last_name, username, password, is_admin)
                 st.success(f"Usuário {username} criado com sucesso!")
                 st.rerun()
             else:
                 st.error("Preencha todos os campos.")
 
     st.subheader("📋 Usuários cadastrados")
-    users = user.list_users()
+    users = user_controller.list_users()
     st.dataframe(
         [{
             "ID": u.id,
