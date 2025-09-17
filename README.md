@@ -1,15 +1,12 @@
-# 📌 Projeto Streamlit - Estrutura MVC + Repository Pattern
+# 📌 Projeto Streamlit - Estrutura MVC
 
-Este projeto segue uma **variação do padrão MVC** (Model-View-Controller), incorporando o **Repository Pattern** para organizar o acesso a dados.
+Este projeto segue o **padrão MVC** (Model-View-Controller) para organizar o acesso a dados.
 O objetivo é manter a aplicação **modular, fácil de manter e escalável**.
 
 - **MVC** separa a aplicação em:
   - **Model** (dados),
   - **View** (interface)
   - **Controller** (lógica).
-
-- **Repository Pattern** adiciona uma camada a mais para **isolar o acesso a dados**.
-  Isso evita acoplamento direto entre **Controllers** e **Banco de Dados**.
 
 ---
 
@@ -19,8 +16,7 @@ O objetivo é manter a aplicação **modular, fácil de manter e escalável**.
 project/
 │
 ├── models/ # Definições ORM (SQLAlchemy)
-├── repositories/ # Acesso a dados (CRUD) usando Repositories Pattern
-├── controllers/ # Regras de negócio / orquestração
+├── controllers/ # Regras de negócio e orquestração
 ├── views/ # Telas do Streamlit (UI)
 └── utils/ # Funções auxiliares
 ```
@@ -36,24 +32,18 @@ project/
 
 ---
 
-### 2. **Repositories** (Repository Pattern)
-- Responsáveis pelo **acesso aos dados** (CRUD).
-- Se comunicam diretamente com o banco de dados usando SQLAlchemy.
-- Abstraem a lógica de persistência, evitando SQL espalhado pelo código.
-
----
-
-### 3. **Controllers**
+### 2. **Controllers**
 - Contêm as **regras de negócio** da aplicação.
-- Orquestram chamadas entre **repositories** e **views**.
+- Se comunicam diretamente com o banco de dados usando SQLAlchemy.
+- Orquestram chamadas entre **models** e **views**.
 
 ---
 
-### 4. **Views**
+### 3. **Views**
 - Camada de **interface com o usuário**, feita com **Streamlit**.
 - Exibe os dados processados pelos controllers.
 
 ---
 
-### 5. **Utils**
+### 4. **Utils**
 - Funções **auxiliares e genéricas**, sem regra de negócio.

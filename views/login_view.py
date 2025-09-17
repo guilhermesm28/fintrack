@@ -1,16 +1,22 @@
 import streamlit as st
-from controllers.user_controller import login
+from controllers.user_controller import UserController
+from time import sleep
+
+user_controller = UserController()
 
 def render():
     st.set_page_config(layout="centered")
-    st.title("🔐 Login")
+    st.title("Login")
 
-    username = st.text_input("Usuário")
-    password = st.text_input("Senha", type="password")
+    with st.form("login_form", clear_on_submit=True):
+        username = st.text_input("Usuário")
+        password = st.text_input("Senha", type="password")
+        submit = st.form_submit_button("Entrar", type="primary", use_container_width=True)
 
-    if st.button("Entrar", type="primary", use_container_width=True):
-        if login(username, password):
-            st.success("Logado com sucesso!")
+    if submit:
+        if user_controller.login(username, password):
+            st.toast("Login realizado com sucesso!", icon="✅")
+            sleep(2)
             st.rerun()
         else:
-            st.error("Usuário e/ou senha incorretos.")
+            st.toast("Usuário e/ou senha incorreto(s).", icon="❌")
