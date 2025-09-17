@@ -1,4 +1,11 @@
-from sqlalchemy import Column, BigInteger, String, Boolean, TIMESTAMP, func
+from sqlalchemy import (
+    Column,
+    BigInteger,
+    String,
+    Boolean,
+    TIMESTAMP,
+    func
+)
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
