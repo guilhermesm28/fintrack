@@ -1,16 +1,14 @@
 from utils.database_util import get_session
-from models.user_finance_model import UserFinances
-from sqlalchemy import select, func
+from models.user_settings_model import UserSettings
 
-class UserFinanceController:
+class UserSettingsController:
     def __init__(self):
         self.session = get_session()
 
-    def create_user_finance(self, user_id, total_income, pct_fixed_expenses, pct_free_expenses, pct_investments, is_self_employed=False):
+    def create_user_finance(self, user_id, pct_fixed_expenses, pct_free_expenses, pct_investments, is_self_employed=False):
         with self.session as session:
-            new_user_finance = UserFinances(
+            new_user_finance = UserSettings(
                 user_id=user_id,
-                total_income=total_income,
                 pct_fixed_expenses=pct_fixed_expenses,
                 pct_free_expenses=pct_free_expenses,
                 pct_investments=pct_investments,

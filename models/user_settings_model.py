@@ -11,12 +11,11 @@ from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
 
-class UserFinances(Base):
-    __tablename__ = "user_finances"
+class UserSettings(Base):
+    __tablename__ = "user_settings"
 
     id = Column(BigInteger, primary_key=True, autoincrement=True)
     user_id = Column(BigInteger, ForeignKey("public.users.id", ondelete="CASCADE"), nullable=False)
-    total_income = Column(Numeric(12, 2), nullable=False, default=0)
     pct_fixed_expenses = Column(Numeric(5, 2), nullable=False, default=0)
     pct_free_expenses = Column(Numeric(5, 2), nullable=False, default=0)
     pct_investments = Column(Numeric(5, 2), nullable=False, default=0)
