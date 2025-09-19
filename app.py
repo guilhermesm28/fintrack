@@ -12,6 +12,7 @@ else:
     username = st.session_state.get("fullname")
     pages = [
         st.Page("views/home_view.py", title="Página inicial"),
+        st.Page("views/fixed_transactions_view.py", title="Transações fixas"),
         st.Page("views/planner_view.py", title="Planejamento financeiro"),
     ]
 
