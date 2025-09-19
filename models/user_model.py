@@ -6,12 +6,11 @@ from sqlalchemy import (
     TIMESTAMP,
     func
 )
-from sqlalchemy.orm import declarative_base
-
-Base = declarative_base()
+from utils.database_util import Base
 
 class User(Base):
     __tablename__ = "users"
+    __table_args__ = {"schema": "public"}
 
     id = Column(BigInteger, primary_key=True, autoincrement=True)
     first_name = Column(String, nullable=True)

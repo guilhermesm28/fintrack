@@ -7,12 +7,11 @@ from sqlalchemy import (
     ForeignKey,
     func
 )
-from sqlalchemy.orm import declarative_base
-
-Base = declarative_base()
+from utils.database_util import Base
 
 class UserSettings(Base):
     __tablename__ = "user_settings"
+    __table_args__ = {"schema": "public"}
 
     id = Column(BigInteger, primary_key=True, autoincrement=True)
     user_id = Column(BigInteger, ForeignKey("public.users.id", ondelete="CASCADE"), nullable=False)

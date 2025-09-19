@@ -9,12 +9,11 @@ from sqlalchemy import (
     ForeignKey,
     func
 )
-from sqlalchemy.orm import declarative_base
+from utils.database_util import Base
 
-Base = declarative_base()
-
-class UserSettings(Base):
+class FixedTransactions(Base):
     __tablename__ = "fixed_transactions"
+    __table_args__ = {"schema": "public"}
 
     id = Column(BigInteger, primary_key=True, autoincrement=True)
     user_id = Column(BigInteger, ForeignKey("public.users.id", ondelete="CASCADE"), nullable=False)
