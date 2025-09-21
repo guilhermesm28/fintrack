@@ -31,7 +31,7 @@ with tabs[1]:
         col1, col2 = st.columns([4,1], vertical_alignment="bottom")
 
         with col1:
-            user_settings_id = st.number_input("ID", min_value=1, value=None)
+            user_settings_id = st.number_input("ID", min_value=1, value=None, placeholder="Digite o ID do planejamento")
         with col2:
             search_btn = st.button("Pesquisar", type="primary", use_container_width=True)
 
@@ -57,21 +57,25 @@ with tabs[1]:
             submit = st.form_submit_button("Atualizar planejamento", type="primary", use_container_width=True)
 
             if submit:
-                try:
-                    user_settings_controller.update_user_settings(
-                        user_settings.id,
-                        new_pct_fixed_expenses,
-                        new_pct_free_expenses,
-                        new_pct_investments,
-                        new_is_self_employed,
-                        new_is_active
-                    )
-                    st.toast(f"Planejamento atualizado com sucesso!", icon="✅")
-                    sleep(1)
-                    st.session_state.pop("user_settings_to_edit", None)
-                    st.rerun()
-                except Exception as e:
-                    st.toast(f"Erro ao atualizar planejamento: {str(e)}", icon="❌")
+                validate_percentages = user_settings_controller.validate_percentages(new_pct_fixed_expenses, new_pct_free_expenses, new_pct_investments)
+                if validate_percentages:
+                    try:
+                        user_settings_controller.update_user_settings(
+                            user_settings.id,
+                            new_pct_fixed_expenses,
+                            new_pct_free_expenses,
+                            new_pct_investments,
+                            new_is_self_employed,
+                            new_is_active
+                        )
+                        st.toast(f"Planejamento atualizado com sucesso!", icon="✅")
+                        sleep(1)
+                        st.session_state.pop("user_settings_to_edit", None)
+                        st.rerun()
+                    except Exception as e:
+                        st.toast(f"Erro ao atualizar planejamento: {str(e)}", icon="❌")
+                else:
+                    st.toast("A soma das porcentagens deve ser igual a 100%", icon="❌")
 
 with tabs[2]:
     with st.form("criar_planejamento", clear_on_submit=True):
@@ -85,16 +89,20 @@ with tabs[2]:
         submit = st.form_submit_button("Criar planejamento", type="primary", use_container_width=True)
 
         if submit:
-            try:
-                user_settings_controller.create_user_settings(
-                    user_id=st.session_state["user_id"],
-                    pct_fixed_expenses=pct_fixed_expenses,
-                    pct_free_expenses=pct_free_expenses,
-                    pct_investments=pct_investments,
-                    is_self_employed=new_is_self_employed
-                )
-                st.toast("Planejamento criado com sucesso!", icon="✅")
-                sleep(1)
-                st.rerun()
-            except Exception as e:
-                st.toast(f"Erro ao criar planejamento: {str(e)}", icon="❌")
+            validate_percentages = user_settings_controller.validate_percentages(new_pct_fixed_expenses, new_pct_free_expenses, new_pct_investments)
+            if validate_percentages:
+                try:
+                    user_settings_controller.create_user_settings(
+                        user_id=st.session_state["user_id"],
+                        pct_fixed_expenses=pct_fixed_expenses,
+                        pct_free_expenses=pct_free_expenses,
+                        pct_investments=pct_investments,
+                        is_self_employed=new_is_self_employed
+                    )
+                    st.toast("Planejamento criado com sucesso!", icon="✅")
+                    sleep(1)
+                    st.rerun()
+                except Exception as e:
+                    st.toast(f"Erro ao criar planejamento: {str(e)}", icon="❌")
+            else:
+                st.toast("A soma das porcentagens deve ser igual a 100%", icon="❌")

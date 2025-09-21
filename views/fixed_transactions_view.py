@@ -32,7 +32,7 @@ with tabs[1]:
         col1, col2 = st.columns([4,1], vertical_alignment="bottom")
 
         with col1:
-            fixed_transaction_id = st.number_input("ID", min_value=1, value=None)
+            fixed_transaction_id = st.number_input("ID", min_value=1, value=None, placeholder="Digite o ID da transação")
         with col2:
             search_btn = st.button("Pesquisar", type="primary", use_container_width=True)
 

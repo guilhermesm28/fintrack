@@ -31,7 +31,7 @@ with tabs[1]:
         col1, col2 = st.columns([4,1], vertical_alignment="bottom")
 
         with col1:
-            username = st.text_input("Usuário")
+            username = st.text_input("Usuário", placeholder="Digite o usuário")
         with col2:
             search_btn = st.button("Pesquisar", type="primary", use_container_width=True)
 

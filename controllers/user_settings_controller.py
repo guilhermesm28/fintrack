@@ -17,6 +17,12 @@ class UserSettingsController:
             stmt = select(UserSettings).where(UserSettings.user_id == user_id)
             return session.scalars(stmt).first()
 
+    def validate_percentages(self, pct_fixed_expenses, pct_free_expenses, pct_investments):
+        total_percentage = pct_fixed_expenses + pct_free_expenses + pct_investments
+        if total_percentage > 100 or total_percentage < 100:
+            return False
+        return True
+
     def create_user_settings(self, user_id, pct_fixed_expenses, pct_free_expenses, pct_investments, is_self_employed=False):
         with self.session as session:
             new_user_settings = UserSettings(
