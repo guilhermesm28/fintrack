@@ -27,7 +27,7 @@ class UserController:
 
     def login(self, username: str, password: str) -> bool:
         user = self.get_user_by_username(username)
-        if user and verify_password(password, user.password):
+        if user and verify_password(password, user.password) and user.is_active:
             st.session_state.logged_in = True
             st.session_state.username = user.username
             st.session_state.fullname = f"{user.first_name} {user.last_name}"
@@ -52,7 +52,7 @@ class UserController:
             session.refresh(new_user)
             return new_user
 
-    def update_user(self, user_id, first_name, last_name, username, password=None, is_admin=False):
+    def update_user(self, user_id, first_name, last_name, username, password=None, is_admin=False, is_active=True):
         with self.session as session:
             db_user = session.query(User).filter_by(id=user_id).first()
             if not db_user:
@@ -64,6 +64,7 @@ class UserController:
             if password:
                 db_user.password = hash_password(password)
             db_user.is_admin = is_admin
+            db_user.is_active = is_active
 
             session.commit()
             session.refresh(db_user)

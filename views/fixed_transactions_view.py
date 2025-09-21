@@ -57,6 +57,7 @@ with tabs[1]:
             new_type = col4.selectbox("Tipo", type_options, index=type_options.index(fixed_transaction.type))
 
             new_category = col5.text_input("Categoria", value=fixed_transaction.category)
+            new_is_active = st.checkbox("Ativo?", value=fixed_transaction.is_active)
 
             submit = st.form_submit_button("Atualizar transação", type="primary", use_container_width=True)
 
@@ -68,10 +69,11 @@ with tabs[1]:
                         new_due_day,
                         new_description,
                         new_type,
-                        new_category
+                        new_category,
+                        new_is_active
                     )
                     st.toast(f"Transação {new_description} atualizado com sucesso!", icon="✅")
-                    sleep(2)
+                    sleep(1)
                     st.session_state.pop("fixed_transaction_to_edit", None)
                     st.rerun()
                 except Exception as e:
@@ -100,7 +102,7 @@ with tabs[2]:
                     category=category
                 )
                 st.toast("Transação criada com sucesso!", icon="✅")
-                sleep(2)
+                sleep(1)
                 st.rerun()
             except Exception as e:
                 st.toast(f"Erro ao criar transação: {str(e)}", icon="❌")

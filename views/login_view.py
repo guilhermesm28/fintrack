@@ -16,7 +16,7 @@ def render():
     if submit:
         if user_controller.login(username, password):
             st.toast("Login realizado com sucesso!", icon="✅")
-            sleep(2)
+            sleep(1)
             st.rerun()
         else:
-            st.toast("Usuário e/ou senha incorreto(s).", icon="❌")
+            st.toast("Usuário e/ou senha incorreto(s) | Usuário inativo.", icon="❌")

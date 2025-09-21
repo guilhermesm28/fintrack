@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import select, func
 from utils.database_util import get_session
 from models.fixed_transactions_model import FixedTransactions
 
@@ -31,7 +31,7 @@ class FixedTransactionsController:
             stmt = select(FixedTransactions).where(FixedTransactions.user_id == user_id).order_by(FixedTransactions.id)
             return session.scalars(stmt).all()
 
-    def update_fixed_transaction(self, id, amount, due_day, description, type, category):
+    def update_fixed_transaction(self, id, amount, due_day, description, type, category, is_active=True):
         with self.session as session:
             db_fixed_transaction = session.query(FixedTransactions).filter_by(id=id).first()
             if not db_fixed_transaction:
@@ -42,7 +42,26 @@ class FixedTransactionsController:
             db_fixed_transaction.description = description
             db_fixed_transaction.type = type
             db_fixed_transaction.category = category
+            db_fixed_transaction.is_active = is_active
 
             session.commit()
             session.refresh(db_fixed_transaction)
             return db_fixed_transaction
+
+    def get_total_income(self, user_id):
+        with self.session as session:
+            stmt = select(func.sum(FixedTransactions.amount)) \
+                .where(FixedTransactions.user_id == user_id) \
+                .where(FixedTransactions.type == "Receita") \
+                .where(FixedTransactions.is_active == True)
+            result = session.scalars(stmt).first()
+            return result if result else 0
+
+    def get_total_expenses(self, user_id):
+        with self.session as session:
+            stmt = select(func.sum(FixedTransactions.amount)) \
+                .where(FixedTransactions.user_id == user_id) \
+                .where(FixedTransactions.type == "Despesa") \
+                .where(FixedTransactions.is_active == True)
+            result = session.scalars(stmt).first()
+            return result if result else 0

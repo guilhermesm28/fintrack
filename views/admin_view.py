@@ -53,6 +53,7 @@ with tabs[1]:
             new_username = col3.text_input("Usuário", user.username)
             new_password = col4.text_input("Senha", type="password", placeholder="Digite nova senha (opcional)")
             new_is_admin = st.checkbox("Administrador?", value=user.is_admin)
+            new_is_active = st.checkbox("Ativo?", value=user.is_active)
 
             submit = st.form_submit_button("Atualizar usuário", type="primary", use_container_width=True)
 
@@ -64,10 +65,11 @@ with tabs[1]:
                         new_last_name,
                         new_username,
                         new_password if new_password else None,
-                        new_is_admin
+                        new_is_admin,
+                        new_is_active
                     )
                     st.toast(f"Usuário {new_username} atualizado com sucesso!", icon="✅")
-                    sleep(2)
+                    sleep(1)
                     st.session_state.pop("user_to_edit", None)
                     st.rerun()
                 except Exception as e:
@@ -89,7 +91,7 @@ with tabs[2]:
             try:
                 user_controller.create_user(first_name, last_name, username, password, is_admin)
                 st.toast(f"Usuário {username} criado com sucesso!", icon="✅")
-                sleep(2)
+                sleep(1)
                 st.rerun()
             except Exception as e:
                 st.toast(f"Erro ao criar usuário: {str(e)}", icon="❌")
