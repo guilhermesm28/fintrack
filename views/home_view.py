@@ -47,7 +47,8 @@ with tabs[0]:
                 st.metric(
                     "Total de despesas",
                     f"R$ {expenses:.2f}",
-                    delta=f"{delta_expenses:.2f} planejado",
+                    delta=f"{delta_expenses:.2f} do planejado",
+                    delta_color="off",
                     help=f"Planejado: R$ {planned_expenses:.2f} ({pct_fixed_expenses}%)"
                 )
 
@@ -76,7 +77,8 @@ with tabs[0]:
                 st.metric(
                     "Investimentos",
                     f"R$ {real_investments:.2f}",
-                    delta=f"{delta_investments:.2f} planejado",
+                    delta=f"{delta_investments:.2f} do planejado",
+                    delta_color="off",
                     help=f"Planejado: R$ {planned_investments:.2f} ({pct_investments}%)"
                 )
 
@@ -87,7 +89,8 @@ with tabs[0]:
                 st.metric(
                     "Gastos livres",
                     f"R$ {real_free:.2f}",
-                    delta=f"{delta_free:.2f} planejado",
+                    delta=f"{delta_free:.2f} do planejado",
+                    delta_color="off",
                     help=f"Planejado: R$ {planned_free:.2f} ({pct_free_expenses}%)"
                 )
 
@@ -141,7 +144,8 @@ with tabs[1]:
                         st.metric(
                             "Total de despesas",
                             f"R$ {expenses:.2f}",
-                            delta=f"{delta_expenses:.2f} planejado",
+                            delta=f"{delta_expenses:.2f} do planejado",
+                            delta_color="off",
                             help=f"Planejado: R$ {planned_expenses:.2f} ({pct_fixed_expenses}%)"
                         )
 
@@ -171,7 +175,8 @@ with tabs[1]:
                         st.metric(
                             "Investimentos",
                             f"R$ {real_investments:.2f}",
-                            delta=f"{delta_investments:.2f} planejado",
+                            delta=f"{delta_investments:.2f} do planejado",
+                            delta_color="off",
                             help=f"Planejado: R$ {planned_investments:.2f} ({pct_investments}%)"
                         )
 
@@ -182,7 +187,8 @@ with tabs[1]:
                         st.metric(
                             "Gastos livres",
                             f"R$ {real_free:.2f}",
-                            delta=f"{delta_free:.2f} planejado",
+                            delta=f"{delta_free:.2f} do planejado",
+                            delta_color="off",
                             help=f"Planejado: R$ {planned_free:.2f} ({pct_free_expenses}%)"
                         )
 
