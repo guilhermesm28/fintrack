@@ -1,16 +1,19 @@
 from datetime import timedelta
 import streamlit as st
 from controllers.user_controller import UserController
+from controllers.categories_controller import CategoriesController
 from time import sleep
 
 user_controller = UserController()
+categories_controller = CategoriesController()
 
 st.set_page_config(layout="wide")
 st.title("Painel de Administração")
 
-tabs = st.tabs(["Listar usuários", "Atualizar usuário", "Criar usuário"])
+users_expander = st.expander("Usuários")
+user_tabs = users_expander.tabs(["Listar usuários", "Atualizar usuário", "Criar usuário"])
 
-with tabs[0]:
+with user_tabs[0]:
     users = user_controller.list_users()
     st.dataframe(
         [{
@@ -26,14 +29,14 @@ with tabs[0]:
         hide_index=True
     )
 
-with tabs[1]:
+with user_tabs[1]:
     with st.container(border=True):
         col1, col2 = st.columns([4,1], vertical_alignment="bottom")
 
         with col1:
             username = st.text_input("Usuário", placeholder="Digite o usuário")
         with col2:
-            search_btn = st.button("Pesquisar", type="primary", use_container_width=True)
+            search_btn = st.button("Pesquisar", type="primary", use_container_width=True, key="user_search_btn")
 
     if search_btn:
         user = user_controller.get_user_by_username(username)
@@ -75,7 +78,7 @@ with tabs[1]:
                 except Exception as e:
                     st.toast(f"Erro ao atualizar usuário: {str(e)}", icon="❌")
 
-with tabs[2]:
+with user_tabs[2]:
     with st.form("criar_usuario", clear_on_submit=True):
         col1, col2, col3, col4 = st.columns(4)
 
@@ -95,3 +98,81 @@ with tabs[2]:
                 st.rerun()
             except Exception as e:
                 st.toast(f"Erro ao criar usuário: {str(e)}", icon="❌")
+
+categories_expander = st.expander("Categorias")
+category_tabs = categories_expander.tabs(["Listar categorias", "Atualizar categoria", "Criar categoria"])
+
+with category_tabs[0]:
+    categories = categories_controller.list_categories()
+    st.dataframe(
+        [{
+            "ID": c.id,
+            "Categoria": c.name,
+            "Tipo": "Saída" if c.is_expense else "Entrada",
+            "Ativo": c.is_active,
+            "Criado em": c.created_at - timedelta(hours=3) if c.created_at else None,
+            "Atualizado em": c.updated_at - timedelta(hours=3) if c.updated_at else None
+        } for c in categories],
+        hide_index=True
+    )
+
+with category_tabs[1]:
+    with st.container(border=True):
+        col1, col2 = st.columns([4,1], vertical_alignment="bottom")
+
+        with col1:
+            category_id = st.text_input("Categoria", placeholder="Digite o ID da categoria")
+        with col2:
+            search_btn = st.button("Pesquisar", type="primary", use_container_width=True, key="category_search_btn")
+
+    if search_btn:
+        category = categories_controller.get_categories_by_id(category_id)
+        if category:
+            st.session_state["category_to_edit"] = category
+        else:
+            st.toast("Categoria não encontrada", icon="❌")
+
+    if "category_to_edit" in st.session_state:
+        category = st.session_state["category_to_edit"]
+
+        with st.form("atualizar_categoria", clear_on_submit=True):
+            col1, col2, col3 = st.columns(3, vertical_alignment="bottom")
+
+            new_name = col1.text_input("Categoria", category.name)
+            new_is_expense = col2.checkbox("Saída?", value=category.is_expense)
+            new_is_active = col3.checkbox("Ativo?", value=category.is_active)
+
+            submit = st.form_submit_button("Atualizar categoria", type="primary", use_container_width=True)
+
+            if submit:
+                try:
+                    categories_controller.update_category(
+                        category.id,
+                        new_name,
+                        new_is_expense,
+                        new_is_active
+                    )
+                    st.toast(f"Categoria {new_name} atualizada com sucesso!", icon="✅")
+                    sleep(1)
+                    st.session_state.pop("category_to_edit", None)
+                    st.rerun()
+                except Exception as e:
+                    st.toast(f"Erro ao atualizar categoria: {str(e)}", icon="❌")
+
+with category_tabs[2]:
+    with st.form("criar_categoria", clear_on_submit=True):
+        col1, col2 = st.columns(2, vertical_alignment="bottom")
+
+        name = col1.text_input("Categoria")
+        is_expense = col2.checkbox("Saída?", value=True)
+
+        submit = st.form_submit_button("Criar categoria", type="primary", use_container_width=True)
+
+        if submit:
+            try:
+                categories_controller.create_category(name, is_expense)
+                st.toast(f"Categoria {name} criada com sucesso!", icon="✅")
+                sleep(1)
+                st.rerun()
+            except Exception as e:
+                st.toast(f"Erro ao criar categoria: {str(e)}", icon="❌")

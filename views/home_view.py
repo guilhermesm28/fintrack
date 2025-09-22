@@ -48,7 +48,7 @@ with tabs[0]:
                     "Total de despesas",
                     f"R$ {expenses:.2f}",
                     delta=f"{delta_expenses:.2f} do planejado",
-                    delta_color="off",
+                    delta_color="inverse",
                     help=f"Planejado: R$ {planned_expenses:.2f} ({pct_fixed_expenses}%)"
                 )
 
@@ -78,7 +78,7 @@ with tabs[0]:
                     "Investimentos",
                     f"R$ {real_investments:.2f}",
                     delta=f"{delta_investments:.2f} do planejado",
-                    delta_color="off",
+                    delta_color="inverse",
                     help=f"Planejado: R$ {planned_investments:.2f} ({pct_investments}%)"
                 )
 
@@ -90,7 +90,7 @@ with tabs[0]:
                     "Gastos livres",
                     f"R$ {real_free:.2f}",
                     delta=f"{delta_free:.2f} do planejado",
-                    delta_color="off",
+                    delta_color="inverse",
                     help=f"Planejado: R$ {planned_free:.2f} ({pct_free_expenses}%)"
                 )
 
@@ -145,7 +145,7 @@ with tabs[1]:
                             "Total de despesas",
                             f"R$ {expenses:.2f}",
                             delta=f"{delta_expenses:.2f} do planejado",
-                            delta_color="off",
+                            delta_color="inverse",
                             help=f"Planejado: R$ {planned_expenses:.2f} ({pct_fixed_expenses}%)"
                         )
 
@@ -176,7 +176,7 @@ with tabs[1]:
                             "Investimentos",
                             f"R$ {real_investments:.2f}",
                             delta=f"{delta_investments:.2f} do planejado",
-                            delta_color="off",
+                            delta_color="inverse",
                             help=f"Planejado: R$ {planned_investments:.2f} ({pct_investments}%)"
                         )
 
@@ -188,7 +188,7 @@ with tabs[1]:
                             "Gastos livres",
                             f"R$ {real_free:.2f}",
                             delta=f"{delta_free:.2f} do planejado",
-                            delta_color="off",
+                            delta_color="inverse",
                             help=f"Planejado: R$ {planned_free:.2f} ({pct_free_expenses}%)"
                         )
 
