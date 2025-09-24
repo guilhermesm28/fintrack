@@ -1,4 +1,4 @@
-from sqlalchemy import select, func
+from sqlalchemy import select
 from utils.database_util import get_session
 from models.categories_model import Categories
 
@@ -14,7 +14,7 @@ class CategoriesController:
     def get_categories_by_type(self, is_expense):
         with self.session as session:
             stmt = select(Categories).where(Categories.is_expense == is_expense)
-            return session.scalars(stmt).first()
+            return session.scalars(stmt).all()
 
     def create_category(self, name, is_expense):
         with self.session as session:
