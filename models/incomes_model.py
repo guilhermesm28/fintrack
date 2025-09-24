@@ -27,4 +27,4 @@ class Incomes(Base):
     created_at = Column(DateTime, nullable=False, server_default=func.now())
     updated_at = Column(DateTime, nullable=True, onupdate=func.now())
 
-    category = relationship("Categories", backref="incomes")
+    category = relationship("Categories", back_populates="incomes")

@@ -1,5 +1,5 @@
 from sqlalchemy.orm import selectinload
-from sqlalchemy import select
+from sqlalchemy import select, func
 from utils.database_util import get_session
 from models.expenses_model import Expenses
 
@@ -48,3 +48,11 @@ class ExpensesController:
             session.commit()
             session.refresh(db_expense)
             return db_expense
+
+    def get_total_expenses(self, user_id):
+        with self.session as session:
+            stmt = select(func.sum(Expenses.amount)) \
+                .where(Expenses.user_id == user_id) \
+                .where(Expenses.is_active == True)
+            result = session.scalars(stmt).first()
+            return result if result else 0

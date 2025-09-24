@@ -6,6 +6,7 @@ from sqlalchemy import (
     DateTime,
     func
 )
+from sqlalchemy.orm import relationship
 from utils.database_util import Base
 
 class Categories(Base):
@@ -18,3 +19,6 @@ class Categories(Base):
     is_active = Column(Boolean, nullable=False, default=True)
     created_at = Column(DateTime, nullable=False, server_default=func.now())
     updated_at = Column(DateTime, nullable=True, onupdate=func.now())
+
+    expenses = relationship("Expenses", back_populates="category")
+    incomes = relationship("Incomes", back_populates="category")

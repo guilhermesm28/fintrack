@@ -1,5 +1,5 @@
 from sqlalchemy.orm import selectinload
-from sqlalchemy import select
+from sqlalchemy import select, func
 from utils.database_util import get_session
 from models.incomes_model import Incomes
 
@@ -48,3 +48,11 @@ class IncomesController:
             session.commit()
             session.refresh(db_income)
             return db_income
+
+    def get_total_incomes(self, user_id):
+        with self.session as session:
+            stmt = select(func.sum(Incomes.amount)) \
+                .where(Incomes.user_id == user_id) \
+                .where(Incomes.is_active == True)
+            result = session.scalars(stmt).first()
+            return result if result else 0

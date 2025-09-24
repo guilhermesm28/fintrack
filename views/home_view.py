@@ -1,8 +1,10 @@
 import streamlit as st
-from controllers.fixed_transactions_controller import FixedTransactionsController
+from controllers.expenses_controller import ExpensesController
+from controllers.incomes_controller import IncomesController
 from controllers.user_settings_controller import UserSettingsController
 
-fixed_transactions_controller = FixedTransactionsController()
+incomes_controller = IncomesController()
+expenses_controller = ExpensesController()
 user_settings_controller = UserSettingsController()
 
 settings = user_settings_controller.get_user_settings_by_user_id(st.session_state["user_id"])
@@ -20,14 +22,14 @@ with tabs[0]:
         st.write("Siga o passo a passo abaixo para configurar seu planejamento:")
 
         with st.container(border=True):
-            st.write("1. Cadastre suas transações fixas (receitas e despesas):")
-            st.page_link("views/fixed_transactions_view.py", label="Transações fixas", icon="📈")
+            st.write("1. Cadastre suas transações (receitas e despesas):")
+            st.page_link("views/transactions_view.py", label="Transações", icon="📈")
             st.write("2. Cadastre seu planejamento financeiro:")
             st.page_link("views/planner_view.py", label="Planejamento financeiro", icon="📊")
 
     else:
-        incomes = fixed_transactions_controller.get_total_income(st.session_state["user_id"])
-        expenses = fixed_transactions_controller.get_total_expenses(st.session_state["user_id"])
+        incomes = incomes_controller.get_total_incomes(st.session_state["user_id"])
+        expenses = expenses_controller.get_total_expenses(st.session_state["user_id"])
 
         pct_fixed_expenses = settings.pct_fixed_expenses
         pct_free_expenses = settings.pct_free_expenses
