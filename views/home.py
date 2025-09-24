@@ -1,7 +1,7 @@
 import streamlit as st
-from controllers.expenses_controller import ExpensesController
-from controllers.incomes_controller import IncomesController
-from controllers.user_settings_controller import UserSettingsController
+from controllers.expenses import ExpensesController
+from controllers.incomes import IncomesController
+from controllers.user_settings import UserSettingsController
 
 incomes_controller = IncomesController()
 expenses_controller = ExpensesController()
@@ -23,9 +23,9 @@ with tabs[0]:
 
         with st.container(border=True):
             st.write("1. Cadastre suas transações (receitas e despesas):")
-            st.page_link("views/transactions_view.py", label="Transações", icon="📈")
+            st.page_link("views/transactions.py", label="Transações", icon="📈")
             st.write("2. Cadastre seu planejamento financeiro:")
-            st.page_link("views/planner_view.py", label="Planejamento financeiro", icon="📊")
+            st.page_link("views/planner.py", label="Planejamento financeiro", icon="📊")
 
     else:
         incomes = incomes_controller.get_total_incomes(st.session_state["user_id"])

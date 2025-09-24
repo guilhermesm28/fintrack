@@ -1,8 +1,8 @@
 from datetime import timedelta
 import streamlit as st
-from controllers.incomes_controller import IncomesController
-from controllers.expenses_controller import ExpensesController
-from controllers.categories_controller import CategoriesController
+from controllers.incomes import IncomesController
+from controllers.expenses import ExpensesController
+from controllers.categories import CategoriesController
 from time import sleep
 
 incomes_controller = IncomesController()

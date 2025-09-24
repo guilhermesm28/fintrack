@@ -1,7 +1,7 @@
 import streamlit as st
 from time import sleep
 from datetime import timedelta
-from controllers.user_settings_controller import UserSettingsController
+from controllers.user_settings import UserSettingsController
 
 user_settings_controller = UserSettingsController()
 

@@ -1,6 +1,6 @@
-from utils.database_util import get_session
+from utils.db import get_session
 from sqlalchemy import select
-from models.user_settings_model import UserSettings
+from models.user_settings import UserSettings
 
 
 class UserSettingsController:

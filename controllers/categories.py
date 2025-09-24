@@ -1,6 +1,6 @@
 from sqlalchemy import select
-from utils.database_util import get_session
-from models.categories_model import Categories
+from utils.db import get_session
+from models.categories import Categories
 
 class CategoriesController:
     def __init__(self):

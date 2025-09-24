@@ -1,5 +1,5 @@
 import streamlit as st
-from views import login_view
+from views import login
 
 st.set_page_config(
     page_title="FINTRACK",
@@ -7,17 +7,17 @@ st.set_page_config(
 )
 
 if not st.session_state.get("logged_in"):
-    login_view.render()
+    login.render()
 else:
     username = st.session_state.get("fullname")
     pages = [
-        st.Page("views/home_view.py", title="Página inicial"),
-        st.Page("views/transactions_view.py", title="Transações"),
-        st.Page("views/planner_view.py", title="Planejamento financeiro"),
+        st.Page("views/home.py", title="Página inicial"),
+        st.Page("views/transactions.py", title="Transações"),
+        st.Page("views/planner.py", title="Planejamento financeiro"),
     ]
 
     if st.session_state.get("is_admin", False):
-        pages.insert(1, st.Page("views/admin_view.py", title="Administração"))
+        pages.insert(1, st.Page("views/admin.py", title="Administração"))
 
     menu = st.navigation(pages, position="top")
     menu.run()

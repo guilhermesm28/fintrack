@@ -10,10 +10,10 @@ from sqlalchemy import (
     func
 )
 from sqlalchemy.orm import relationship
-from utils.database_util import Base
+from utils.db import Base
 
-class Expenses(Base):
-    __tablename__ = "expenses"
+class Incomes(Base):
+    __tablename__ = "incomes"
     __table_args__ = {"schema": "public"}
 
     id = Column(BigInteger, primary_key=True, autoincrement=True)
@@ -27,4 +27,4 @@ class Expenses(Base):
     created_at = Column(DateTime, nullable=False, server_default=func.now())
     updated_at = Column(DateTime, nullable=True, onupdate=func.now())
 
-    category = relationship("Categories", back_populates="expenses")
+    category = relationship("Categories", back_populates="incomes")

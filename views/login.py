@@ -1,5 +1,5 @@
 import streamlit as st
-from controllers.user_controller import UserController
+from controllers.users import UserController
 from time import sleep
 
 user_controller = UserController()

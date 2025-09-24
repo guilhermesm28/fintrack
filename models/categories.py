@@ -7,7 +7,7 @@ from sqlalchemy import (
     func
 )
 from sqlalchemy.orm import relationship
-from utils.database_util import Base
+from utils.db import Base
 
 class Categories(Base):
     __tablename__ = "categories"

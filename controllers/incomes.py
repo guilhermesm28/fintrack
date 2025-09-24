@@ -1,7 +1,7 @@
 from sqlalchemy.orm import selectinload
 from sqlalchemy import select, func
-from utils.database_util import get_session
-from models.incomes_model import Incomes
+from utils.db import get_session
+from models.incomes import Incomes
 
 class IncomesController:
     def __init__(self):

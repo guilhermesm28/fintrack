@@ -1,5 +1,5 @@
-from .categories_model import Categories
-from .expenses_model import Expenses
-from .incomes_model import Incomes
+from .categories import Categories
+from .expenses import Expenses
+from .incomes import Incomes
 
 __all__ = ["Categories", "Expenses", "Incomes"]

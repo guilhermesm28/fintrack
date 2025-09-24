@@ -6,9 +6,9 @@ from sqlalchemy import (
     TIMESTAMP,
     func
 )
-from utils.database_util import Base
+from utils.db import Base
 
-class User(Base):
+class Users(Base):
     __tablename__ = "users"
     __table_args__ = {"schema": "public"}
 

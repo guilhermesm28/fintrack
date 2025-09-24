@@ -1,7 +1,7 @@
 import streamlit as st
-from utils.security_util import hash_password, verify_password
-from utils.database_util import get_session
-from models.user_model import User
+from utils.security import hash_password, verify_password
+from utils.db import get_session
+from models.users import Users
 from sqlalchemy import select, func
 
 class UserController:
@@ -10,19 +10,19 @@ class UserController:
 
     def get_user_by_username(self, username):
         with self.session as session:
-            stmt = select(User).where(User.username == username)
+            stmt = select(Users).where(Users.username == username)
             return session.scalars(stmt).first()
 
     def update_last_login(self, username):
         with self.session as session:
-            db_user = session.query(User).filter_by(id=username.id).first()
+            db_user = session.query(Users).filter_by(id=username.id).first()
             if db_user:
                 db_user.last_login = func.now()
                 session.commit()
 
     def list_users(self):
         with self.session as session:
-            stmt = select(User).order_by(User.id)
+            stmt = select(Users).order_by(Users.id)
             return session.scalars(stmt).all()
 
     def login(self, username: str, password: str) -> bool:
@@ -40,7 +40,7 @@ class UserController:
     def create_user(self, first_name, last_name, username, password, is_admin=False):
         hashed_password = hash_password(password)
         with self.session as session:
-            new_user = User(
+            new_user = Users(
                 first_name=first_name,
                 last_name=last_name,
                 username=username,
@@ -54,7 +54,7 @@ class UserController:
 
     def update_user(self, user_id, first_name, last_name, username, password=None, is_admin=False, is_active=True):
         with self.session as session:
-            db_user = session.query(User).filter_by(id=user_id).first()
+            db_user = session.query(Users).filter_by(id=user_id).first()
             if not db_user:
                 return None
 

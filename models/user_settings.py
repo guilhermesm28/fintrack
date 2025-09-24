@@ -7,7 +7,7 @@ from sqlalchemy import (
     ForeignKey,
     func
 )
-from utils.database_util import Base
+from utils.db import Base
 
 class UserSettings(Base):
     __tablename__ = "user_settings"
