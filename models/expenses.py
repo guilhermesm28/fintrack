@@ -28,3 +28,4 @@ class Expenses(Base):
     updated_at = Column(DateTime, nullable=True, onupdate=func.now())
 
     category = relationship("Categories", back_populates="expenses")
+    expense_allocations = relationship("ExpenseAllocations", back_populates="expenses")
