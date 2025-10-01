@@ -29,7 +29,9 @@ with tabs[0]:
 
     else:
         incomes = incomes_controller.get_total_incomes(st.session_state["user_id"])
-        expenses = expenses_controller.get_total_expenses(st.session_state["user_id"])
+        expenses = expenses_controller.get_total_fixed_expenses(st.session_state["user_id"])
+        investments = expenses_controller.get_total_investments(st.session_state["user_id"])
+        free_expenses = expenses_controller.get_total_free_expenses(st.session_state["user_id"])
 
         pct_fixed_expenses = settings.pct_fixed_expenses
         pct_free_expenses = settings.pct_free_expenses
@@ -63,22 +65,13 @@ with tabs[0]:
                 planned_investments = incomes * pct_investments / 100
                 planned_free = incomes * pct_free_expenses / 100
 
-                # Real proporcional ao saldo
-                total_var_pct = pct_investments + pct_free_expenses
-                if total_var_pct > 0:
-                    real_investments = balance * (pct_investments / total_var_pct)
-                    real_free = balance * (pct_free_expenses / total_var_pct)
-                else:
-                    real_investments = 0
-                    real_free = 0
-
             # Investimentos
             with col4:
-                delta_investments = float(real_investments - planned_investments)
+                delta_investments = float(investments - planned_investments)
 
                 st.metric(
                     "Investimentos",
-                    f"R$ {real_investments:.2f}",
+                    f"R$ {investments:.2f}",
                     delta=f"{delta_investments:.2f} do planejado",
                     delta_color="inverse",
                     help=f"Planejado: R$ {planned_investments:.2f} ({pct_investments}%)"
@@ -86,11 +79,11 @@ with tabs[0]:
 
             # Gastos livres
             with col5:
-                delta_free = float(real_free - planned_free)
+                delta_free = float(free_expenses - planned_free)
 
                 st.metric(
                     "Gastos livres",
-                    f"R$ {real_free:.2f}",
+                    f"R$ {free_expenses:.2f}",
                     delta=f"{delta_free:.2f} do planejado",
                     delta_color="inverse",
                     help=f"Planejado: R$ {planned_free:.2f} ({pct_free_expenses}%)"
