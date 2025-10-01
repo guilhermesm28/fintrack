@@ -124,6 +124,7 @@ with expense_tabs[0]:
             "Dia de referência": e.due_day,
             "Descrição": e.description,
             "Descrição detalhada": e.description_detail,
+            "Gasto fixo": e.is_fixed_expense,
             "Ativo": e.is_active,
             "Criado em": e.created_at - timedelta(hours=3) if e.created_at else None,
             "Atualizado em": e.updated_at - timedelta(hours=3) if e.updated_at else None
@@ -158,6 +159,7 @@ with expense_tabs[1]:
             new_due_day = col3.number_input("Dia de referência", value=expense.due_day)
             new_description = col4.text_input("Descrição", value=expense.description)
             new_description_detail = col5.text_input("Descrição detalhada", value=expense.description_detail)
+            new_is_fixed_expense = st.checkbox("Gasto fixo?", value=expense.is_fixed_expense)
             new_is_active = st.checkbox("Ativo?", value=expense.is_active)
 
             submit = st.form_submit_button("Atualizar saída", type="primary", use_container_width=True)
@@ -189,6 +191,7 @@ with expense_tabs[2]:
         due_day = col3.number_input("Dia de referência", min_value=1, max_value=31)
         description = col4.text_input("Descrição")
         description_detail = col5.text_input("Descrição detalhada")
+        is_fixed_expense = st.checkbox("Gasto fixo?", value=True)
 
         submit = st.form_submit_button("Criar entrada", type="primary", use_container_width=True)
 
