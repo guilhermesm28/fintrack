@@ -2,6 +2,7 @@ from sqlalchemy.orm import selectinload
 from sqlalchemy import select, func
 from utils.db import get_session
 from models.incomes import Incomes
+from models.expense_allocations import ExpenseAllocations
 
 class IncomesController:
     def __init__(self):
@@ -56,3 +57,23 @@ class IncomesController:
                 .where(Incomes.is_active == True)
             result = session.scalars(stmt).first()
             return result if result else 0
+
+    def get_unallocated_incomes(self, user_id):
+        with self.session as session:
+            stmt = (
+                select(
+                    Incomes.id,
+                    Incomes.description,
+                    Incomes.amount,
+                    func.coalesce(func.sum(ExpenseAllocations.allocated_amount), 0).label("allocated"),
+                    (Incomes.amount - func.coalesce(func.sum(ExpenseAllocations.allocated_amount), 0)).label("saldo")
+                )
+                .outerjoin(ExpenseAllocations, Incomes.id == ExpenseAllocations.expense_id)
+                .where(Incomes.user_id == user_id)
+                .where(Incomes.is_active == True)
+                .group_by(Incomes.id, Incomes.description, Incomes.amount)
+                .having((Incomes.amount - func.coalesce(func.sum(ExpenseAllocations.allocated_amount), 0)) > 0)
+            )
+
+            result = session.execute(stmt).all()
+            return result

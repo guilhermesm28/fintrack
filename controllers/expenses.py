@@ -2,6 +2,8 @@ from sqlalchemy.orm import selectinload
 from sqlalchemy import select, func
 from utils.db import get_session
 from models.expenses import Expenses
+from models.expense_allocations import ExpenseAllocations
+from models.categories import Categories
 
 class ExpensesController:
     def __init__(self):
@@ -49,10 +51,53 @@ class ExpensesController:
             session.refresh(db_expense)
             return db_expense
 
-    def get_total_expenses(self, user_id):
+    def get_total_fixed_expenses(self, user_id):
         with self.session as session:
             stmt = select(func.sum(Expenses.amount)) \
                 .where(Expenses.user_id == user_id) \
+                .where(Expenses.is_fixed_expense == True) \
                 .where(Expenses.is_active == True)
             result = session.scalars(stmt).first()
             return result if result else 0
+
+    def get_total_investments(self, user_id):
+        with self.session as session:
+            stmt = select(func.sum(Expenses.amount)) \
+                .join(Categories, Expenses.category_id == Categories.id and Categories.is_active == True and Categories.is_expense == True) \
+                .where(Categories.name == "Investimentos") \
+                .where(Expenses.user_id == user_id) \
+                .where(Expenses.is_fixed_expense == False) \
+                .where(Expenses.is_active == True)
+            result = session.scalars(stmt).first()
+            return result if result else 0
+
+    def get_total_free_expenses(self, user_id):
+        with self.session as session:
+            stmt = select(func.sum(Expenses.amount)) \
+                .join(Categories, Expenses.category_id == Categories.id and Categories.is_active == True and Categories.is_expense == True) \
+                .where(Categories.name == "Gastos livres") \
+                .where(Expenses.user_id == user_id) \
+                .where(Expenses.is_fixed_expense == False) \
+                .where(Expenses.is_active == True)
+            result = session.scalars(stmt).first()
+            return result if result else 0
+
+    def get_unallocated_expenses(self, user_id):
+        with self.session as session:
+            stmt = (
+                select(
+                    Expenses.id,
+                    Expenses.description,
+                    Expenses.amount,
+                    func.coalesce(func.sum(ExpenseAllocations.allocated_amount), 0).label("allocated"),
+                    (Expenses.amount - func.coalesce(func.sum(ExpenseAllocations.allocated_amount), 0)).label("saldo")
+                )
+                .outerjoin(ExpenseAllocations, Expenses.id == ExpenseAllocations.expense_id)
+                .where(Expenses.user_id == user_id)
+                .where(Expenses.is_active == True)
+                .group_by(Expenses.id, Expenses.description, Expenses.amount)
+                .having((Expenses.amount - func.coalesce(func.sum(ExpenseAllocations.allocated_amount), 0)) > 0)
+            )
+
+            result = session.execute(stmt).all()
+            return result

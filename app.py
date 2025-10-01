@@ -14,6 +14,7 @@ else:
         st.Page("views/home.py", title="Página inicial"),
         st.Page("views/transactions.py", title="Transações"),
         st.Page("views/planner.py", title="Planejamento financeiro"),
+        st.Page("views/allocations.py", title="Alocação de saídas por entrada"),
     ]
 
     if st.session_state.get("is_admin", False):
