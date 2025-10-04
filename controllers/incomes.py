@@ -68,7 +68,7 @@ class IncomesController:
                     func.coalesce(func.sum(ExpenseAllocations.allocated_amount), 0).label("allocated"),
                     (Incomes.amount - func.coalesce(func.sum(ExpenseAllocations.allocated_amount), 0)).label("saldo")
                 )
-                .outerjoin(ExpenseAllocations, Incomes.id == ExpenseAllocations.expense_id)
+                .outerjoin(ExpenseAllocations, Incomes.id == ExpenseAllocations.income_id)
                 .where(Incomes.user_id == user_id)
                 .where(Incomes.is_active == True)
                 .group_by(Incomes.id, Incomes.description, Incomes.amount)

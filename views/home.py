@@ -29,11 +29,11 @@ with tabs[0]:
 
     else:
         incomes = incomes_controller.get_total_incomes(st.session_state["user_id"])
-        expenses = expenses_controller.get_total_fixed_expenses(st.session_state["user_id"])
+        expenses = expenses_controller.get_total_essential_expenses(st.session_state["user_id"])
         investments = expenses_controller.get_total_investments(st.session_state["user_id"])
         free_expenses = expenses_controller.get_total_free_expenses(st.session_state["user_id"])
 
-        pct_fixed_expenses = settings.pct_fixed_expenses
+        pct_essential_expenses = settings.pct_essential_expenses
         pct_free_expenses = settings.pct_free_expenses
         pct_investments = settings.pct_investments
 
@@ -41,19 +41,19 @@ with tabs[0]:
             col1, col2, col3, col4, col5, col6 = st.columns(6)
 
             with col1:
-                st.metric("Total de receitas", f"R$ {incomes:.2f}")
+                st.metric("Total de entradas", f"R$ {incomes:.2f}")
 
-            # Despesas Fixas
+            # Gastos essenciais
             with col2:
-                planned_expenses = incomes * pct_fixed_expenses / 100
+                planned_expenses = incomes * pct_essential_expenses / 100
                 delta_expenses = float(expenses - planned_expenses)
 
                 st.metric(
-                    "Total de despesas",
+                    "Gastos essenciais",
                     f"R$ {expenses:.2f}",
                     delta=f"{delta_expenses:.2f} do planejado",
                     delta_color="inverse",
-                    help=f"Planejado: R$ {planned_expenses:.2f} ({pct_fixed_expenses}%)"
+                    help=f"Planejado: R$ {planned_expenses:.2f} ({pct_essential_expenses}%)"
                 )
 
             # Saldo
@@ -105,11 +105,11 @@ with tabs[1]:
         col1, col2, col3, col4, col5, col6 = st.columns(6, vertical_alignment="bottom")
 
         with col1:
-            incomes = st.number_input("Receitas", min_value=0.0, format="%.2f")
+            incomes = st.number_input("Entradas", min_value=0.0, format="%.2f")
         with col2:
-            expenses = st.number_input("Despesas", min_value=0.0, format="%.2f")
+            expenses = st.number_input("Gastos essenciais", min_value=0.0, format="%.2f")
         with col3:
-            pct_fixed_expenses = st.number_input("Gastos fixos (%)", min_value=0.0, value=40.0, format="%.2f")
+            pct_essential_expenses = st.number_input("Gastos essenciais (%)", min_value=0.0, value=40.0, format="%.2f")
         with col4:
             pct_free_expenses = st.number_input("Gastos livres (%)", min_value=0.0, value=30.0, format="%.2f")
         with col5:
@@ -122,26 +122,26 @@ with tabs[1]:
 
         if submit:
             validate_percentages = user_settings_controller.validate_percentages(
-                pct_fixed_expenses, pct_free_expenses, pct_investments
+                pct_essential_expenses, pct_free_expenses, pct_investments
             )
             if validate_percentages:
                 with st.container(border=True):
                     col1, col2, col3, col4, col5, col6 = st.columns(6)
 
                     with col1:
-                        st.metric("Total de receitas", f"R$ {incomes:.2f}")
+                        st.metric("Total de entradas", f"R$ {incomes:.2f}")
 
-                    # Despesas Fixas
+                    # Gastos essenciais
                     with col2:
-                        planned_expenses = incomes * pct_fixed_expenses / 100
+                        planned_expenses = incomes * pct_essential_expenses / 100
                         delta_expenses = expenses - planned_expenses
 
                         st.metric(
-                            "Total de despesas",
+                            "Gastos essenciais",
                             f"R$ {expenses:.2f}",
                             delta=f"{delta_expenses:.2f} do planejado",
                             delta_color="inverse",
-                            help=f"Planejado: R$ {planned_expenses:.2f} ({pct_fixed_expenses}%)"
+                            help=f"Planejado: R$ {planned_expenses:.2f} ({pct_essential_expenses}%)"
                         )
 
                     # Saldo
@@ -195,4 +195,4 @@ with tabs[1]:
                             help=f"R$ {expenses} * {reserve_months} meses"
                         )
             else:
-                st.toast("Os percentuais de gastos fixos, livres e investimentos devem somar 100%.", icon="🚨")
+                st.toast("Os percentuais de Gastos essenciais, livres e investimentos devem somar 100%.", icon="🚨")

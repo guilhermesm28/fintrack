@@ -15,7 +15,7 @@ with tabs[0]:
     st.dataframe(
         [{
             "ID": s.id,
-            "% Gastos fixos": s.pct_fixed_expenses,
+            "% Gastos essenciais": s.pct_essential_expenses,
             "% Gastos livres": s.pct_free_expenses,
             "% Investimentos": s.pct_investments,
             "Trabalha autônomo?": s.is_self_employed,
@@ -48,7 +48,7 @@ with tabs[1]:
         with st.form("atualizar_planejamento", clear_on_submit=True):
             col1, col2, col3 = st.columns(3)
 
-            new_pct_fixed_expenses = col1.number_input("% Gastos fixos", min_value=0.0, value=float(user_settings.pct_fixed_expenses), format="%.2f")
+            new_pct_essential_expenses = col1.number_input("% Gastos essenciais", min_value=0.0, value=float(user_settings.pct_essential_expenses), format="%.2f")
             new_pct_free_expenses = col2.number_input("% Gastos livres", min_value=0.0, value=float(user_settings.pct_free_expenses), format="%.2f")
             new_pct_investments = col3.number_input("% Investimentos", min_value=0.0, value=float(user_settings.pct_investments), format="%.2f")
             new_is_self_employed = st.checkbox("Trabalha autônomo?", value=user_settings.is_self_employed)
@@ -57,12 +57,12 @@ with tabs[1]:
             submit = st.form_submit_button("Atualizar planejamento", type="primary", use_container_width=True)
 
             if submit:
-                validate_percentages = user_settings_controller.validate_percentages(new_pct_fixed_expenses, new_pct_free_expenses, new_pct_investments)
+                validate_percentages = user_settings_controller.validate_percentages(new_pct_essential_expenses, new_pct_free_expenses, new_pct_investments)
                 if validate_percentages:
                     try:
                         user_settings_controller.update_user_settings(
                             user_settings.id,
-                            new_pct_fixed_expenses,
+                            new_pct_essential_expenses,
                             new_pct_free_expenses,
                             new_pct_investments,
                             new_is_self_employed,
@@ -81,7 +81,7 @@ with tabs[2]:
     with st.form("criar_planejamento", clear_on_submit=True):
         col1, col2, col3 = st.columns(3)
 
-        pct_fixed_expenses = col1.number_input("% Gastos fixos", min_value=0.0, format="%.2f", value=40.0)
+        pct_essential_expenses = col1.number_input("% Gastos essenciais", min_value=0.0, format="%.2f", value=40.0)
         pct_free_expenses = col2.number_input("% Gastos livres", min_value=0.0, format="%.2f", value=30.0)
         pct_investments = col3.number_input("% Investimentos", min_value=0.0, format="%.2f", value=30.0)
         new_is_self_employed = st.checkbox("Trabalha autônomo?", value=False)
@@ -89,12 +89,12 @@ with tabs[2]:
         submit = st.form_submit_button("Criar planejamento", type="primary", use_container_width=True)
 
         if submit:
-            validate_percentages = user_settings_controller.validate_percentages(new_pct_fixed_expenses, new_pct_free_expenses, new_pct_investments)
+            validate_percentages = user_settings_controller.validate_percentages(pct_essential_expenses, pct_free_expenses, pct_investments)
             if validate_percentages:
                 try:
                     user_settings_controller.create_user_settings(
                         user_id=st.session_state["user_id"],
-                        pct_fixed_expenses=pct_fixed_expenses,
+                        pct_essential_expenses=pct_essential_expenses,
                         pct_free_expenses=pct_free_expenses,
                         pct_investments=pct_investments,
                         is_self_employed=new_is_self_employed

@@ -15,7 +15,7 @@ class UserSettings(Base):
 
     id = Column(BigInteger, primary_key=True, autoincrement=True)
     user_id = Column(BigInteger, ForeignKey("public.users.id", ondelete="CASCADE"), nullable=False)
-    pct_fixed_expenses = Column(Numeric(5, 2), nullable=False, default=0)
+    pct_essential_expenses = Column(Numeric(5, 2), nullable=False, default=0)
     pct_free_expenses = Column(Numeric(5, 2), nullable=False, default=0)
     pct_investments = Column(Numeric(5, 2), nullable=False, default=0)
     is_self_employed = Column(Boolean, nullable=False, default=False)

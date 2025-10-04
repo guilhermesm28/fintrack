@@ -17,17 +17,17 @@ class UserSettingsController:
             stmt = select(UserSettings).where(UserSettings.user_id == user_id)
             return session.scalars(stmt).first()
 
-    def validate_percentages(self, pct_fixed_expenses, pct_free_expenses, pct_investments):
-        total_percentage = pct_fixed_expenses + pct_free_expenses + pct_investments
+    def validate_percentages(self, pct_essential_expenses, pct_free_expenses, pct_investments):
+        total_percentage = pct_essential_expenses + pct_free_expenses + pct_investments
         if total_percentage > 100 or total_percentage < 100:
             return False
         return True
 
-    def create_user_settings(self, user_id, pct_fixed_expenses, pct_free_expenses, pct_investments, is_self_employed=False):
+    def create_user_settings(self, user_id, pct_essential_expenses, pct_free_expenses, pct_investments, is_self_employed=False):
         with self.session as session:
             new_user_settings = UserSettings(
                 user_id=user_id,
-                pct_fixed_expenses=pct_fixed_expenses,
+                pct_essential_expenses=pct_essential_expenses,
                 pct_free_expenses=pct_free_expenses,
                 pct_investments=pct_investments,
                 is_self_employed=is_self_employed,
@@ -42,13 +42,13 @@ class UserSettingsController:
             stmt = select(UserSettings).where(UserSettings.user_id == user_id)
             return session.scalars(stmt).all()
 
-    def update_user_settings(self, id, pct_fixed_expenses, pct_free_expenses, pct_investments, is_self_employed=False, is_active=True):
+    def update_user_settings(self, id, pct_essential_expenses, pct_free_expenses, pct_investments, is_self_employed=False, is_active=True):
         with self.session as session:
             db_user_settings = session.query(UserSettings).filter_by(id=id).first()
             if not db_user_settings:
                 return None
 
-            db_user_settings.pct_fixed_expenses = pct_fixed_expenses
+            db_user_settings.pct_essential_expenses = pct_essential_expenses
             db_user_settings.pct_free_expenses = pct_free_expenses
             db_user_settings.pct_investments = pct_investments
             db_user_settings.is_self_employed = is_self_employed
