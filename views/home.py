@@ -100,6 +100,18 @@ with tabs[0]:
                     help=f"R$ {expenses} * {reserve_months} meses"
                 )
 
+        list_incomes = incomes_controller.list_incomes(st.session_state["user_id"])
+
+        cols = st.columns(len(list_incomes))
+
+        for col, income in zip(cols, list_incomes):
+            with col.container(border=True):
+                st.markdown(f"#### R$ {income.amount} - {income.description}")
+                expenses_by_income = incomes_controller.get_expense_allocations_by_income_id(income.id)
+
+                for expense in expenses_by_income:
+                    st.markdown(f" - R$ {expense.allocated_amount} - {expense.expenses.description}")
+
 with tabs[1]:
     with st.form("simular_planejamento"):
         col1, col2, col3, col4, col5, col6 = st.columns(6, vertical_alignment="bottom")
