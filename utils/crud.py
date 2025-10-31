@@ -1,7 +1,7 @@
 from sqlalchemy import text, inspect
 from typing import Dict, Any, Tuple
 import pandas as pd
-from db import get_engine, get_schema
+from utils.db import get_engine
 
 def _build_where_clause(where: Dict[str, Any]) -> Tuple[str, Dict[str, Any]]:
     """Constrói cláusula WHERE com parâmetros nomeados."""
@@ -11,14 +11,6 @@ def _build_where_clause(where: Dict[str, Any]) -> Tuple[str, Dict[str, Any]]:
     conditions = [f"{k} = :w_{k}" for k in where.keys()]
     params = {f"w_{k}": v for k, v in where.items()}
     return " WHERE " + " AND ".join(conditions), params
-
-def _validate_table_exists(table: str) -> bool:
-    """Valida se a tabela existe no banco de dados."""
-    engine = get_engine()
-    inspector = inspect(engine)
-    schema = get_schema()
-    tables = inspector.get_table_names(schema=schema)
-    return table in tables
 
 def select(query) -> pd.DataFrame:
     """Seleciona dados de uma tabela usando uma query SQL customizada."""
@@ -32,9 +24,6 @@ def select(query) -> pd.DataFrame:
 
 def insert(table: str, data: Dict[str, Any]) -> Dict[str, Any]:
     """Insere um registro na tabela a partir de um dicionário."""
-    if not _validate_table_exists(table):
-        raise ValueError(f"Tabela '{table}' não existe")
-
     engine = get_engine()
 
     columns = ", ".join(data.keys())
@@ -58,9 +47,6 @@ def insert(table: str, data: Dict[str, Any]) -> Dict[str, Any]:
 
 def update(table: str, data: Dict[str, Any], where: Dict[str, Any]) -> Dict[str, Any]:
     """Atualiza registros na tabela a partir de um dicionário."""
-    if not _validate_table_exists(table):
-        raise ValueError(f"Tabela '{table}' não existe")
-
     if not where:
         return {
             "success": False,
