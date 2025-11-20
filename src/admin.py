@@ -10,9 +10,6 @@ def create_user():
         username = st.text_input("Usuário")
         password = st.text_input("Senha", type="password")
         is_admin = st.checkbox("Administrador?", value=False)
-        pct_essential_expenses = st.number_input("% Gastos essenciais", min_value=0.0, format="%.2f", value=40.0)
-        pct_free_expenses = st.number_input("% Gastos livres", min_value=0.0, format="%.2f", value=30.0)
-        pct_investments = st.number_input("% Investimentos", min_value=0.0, format="%.2f", value=30.0)
         is_self_employed = st.checkbox("Trabalha autônomo?", value=False)
         is_active = st.checkbox("Ativo", value=True)
 
@@ -35,9 +32,6 @@ def create_user():
                 "username": username,
                 "password": hashed_password,
                 "is_admin": is_admin,
-                "pct_essential_expenses": pct_essential_expenses,
-                "pct_free_expenses": pct_free_expenses,
-                "pct_investments": pct_investments,
                 "is_self_employed": is_self_employed,
                 "is_active": is_active
             }
@@ -87,9 +81,6 @@ def edit_user(object):
         new_username = st.text_input("Usuário", object["username"])
         new_password = st.text_input("Senha", type="password", placeholder="Digite nova senha (opcional)")
         new_is_admin = st.checkbox("Administrador?", value=object["is_admin"])
-        new_pct_essential_expenses = st.number_input("% Gastos essenciais", min_value=0.0, value=float(object["pct_essential_expenses"]), format="%.2f")
-        new_pct_free_expenses = st.number_input("% Gastos livres", min_value=0.0, value=float(object["pct_free_expenses"]), format="%.2f")
-        new_pct_investments = st.number_input("% Investimentos", min_value=0.0, value=float(object["pct_investments"]), format="%.2f")
         new_is_self_employed = st.checkbox("Trabalha autônomo?", value=object["is_self_employed"])
         new_is_active = st.checkbox("Ativo?", value=object["is_active"])
 
@@ -106,9 +97,6 @@ def edit_user(object):
                 "last_name": new_last_name,
                 "username": new_username,
                 "is_admin": new_is_admin,
-                "pct_essential_expenses": new_pct_essential_expenses,
-                "pct_free_expenses": new_pct_free_expenses,
-                "pct_investments": new_pct_investments,
                 "is_self_employed": new_is_self_employed,
                 "is_active": new_is_active,
                 "updated_at": datetime.now(),
@@ -188,9 +176,6 @@ try:
                 first_name || ' ' || last_name as full_name,
                 username,
                 is_admin,
-                pct_essential_expenses,
-                pct_free_expenses,
-                pct_investments,
                 is_self_employed,
                 is_active,
                 last_login,
@@ -220,9 +205,6 @@ try:
                 "full_name": st.column_config.TextColumn("Nome completo"),
                 "username": st.column_config.TextColumn("Usuário"),
                 "is_admin": st.column_config.CheckboxColumn("Administrador"),
-                "pct_essential_expenses": st.column_config.NumberColumn("% gastos essenciais", format="%.2f"),
-                "pct_free_expenses": st.column_config.NumberColumn("% gastos livres", format="%.2f"),
-                "pct_investments": st.column_config.NumberColumn("% investimentos", format="%.2f"),
                 "is_self_employed": st.column_config.CheckboxColumn("Autônomo"),
                 "is_active": st.column_config.CheckboxColumn("Ativo"),
                 "last_login": st.column_config.DatetimeColumn("Último login"),
