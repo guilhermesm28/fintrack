@@ -4,11 +4,11 @@ from utils.crud import select
 import plotly.graph_objects as go
 
 CORES = {
-    "receitas": "#2ecc71",
+    "receita": "#2ecc71",
     "não atribuído": "#3498db",
-    "despesas essenciais": "#e74c3c",
-    "despesas livres": "#e7e43c",
-    "investimentos": "#9b59b6",
+    "essencial": "#e74c3c",
+    "livre": "#e7e43c",
+    "investimento": "#9b59b6",
 }
 
 LEGEND_CONFIG = dict(
@@ -34,10 +34,10 @@ def carregar_dados():
           b.due_day as dia_ref,
           b.amount as valor,
           CASE
-            WHEN b.is_expense = FALSE THEN 'receitas'
-            WHEN b.is_expense = TRUE AND b.is_essential_expense = TRUE THEN 'despesas essenciais'
-            WHEN b.is_expense = TRUE AND b.is_free_expense = TRUE THEN 'despesas livres'
-            WHEN b.is_expense = TRUE AND b.is_investment = TRUE THEN 'investimentos'
+            WHEN b.is_expense = FALSE THEN 'receita'
+            WHEN b.is_expense = TRUE AND b.is_essential_expense = TRUE THEN 'essencial'
+            WHEN b.is_expense = TRUE AND b.is_free_expense = TRUE THEN 'livre'
+            WHEN b.is_expense = TRUE AND b.is_investment = TRUE THEN 'investimento'
           END as categoria,
           b.description as descricao
         FROM users a
@@ -50,10 +50,10 @@ def carregar_dados():
 
 def calcular_totais(df):
     return {
-        "receitas": df.loc[df["categoria"] == "receitas", "valor"].sum(),
-        "essencial": df.loc[df["categoria"] == "despesas essenciais", "valor"].sum(),
-        "livre": df.loc[df["categoria"] == "despesas livres", "valor"].sum(),
-        "investimento": df.loc[df["categoria"] == "investimentos", "valor"].sum(),
+        "receita": df.loc[df["categoria"] == "receita", "valor"].sum(),
+        "essencial": df.loc[df["categoria"] == "essencial", "valor"].sum(),
+        "livre": df.loc[df["categoria"] == "livre", "valor"].sum(),
+        "investimento": df.loc[df["categoria"] == "investimento", "valor"].sum(),
     }
 
 def preparar_dados_grafico(df):
@@ -67,10 +67,10 @@ def preparar_dados_grafico(df):
 
     df_graph = df_graph.rename(columns={"dia_ref": "dia"})
 
-    df_graph["não atribuído"] = df_graph["receitas"] - (
-        df_graph["despesas essenciais"] +
-        df_graph["despesas livres"] +
-        df_graph["investimentos"]
+    df_graph["não atribuído"] = df_graph["receita"] - (
+        df_graph["essencial"] +
+        df_graph["livre"] +
+        df_graph["investimento"]
     )
 
     df_graph["dia"] = df_graph["dia"].astype(str)
@@ -127,59 +127,59 @@ def criar_grafico_barras(df, df_graph):
     espacamento = 0.15
     offset_inicial = -(num_barras - 1) * espacamento / 2
 
-    df_receitas = df_graph[["dia", "receitas"]].copy()
-    df_receitas["key"] = df_receitas["dia"] + "|receitas"
-    df_receitas = df_receitas.merge(df_tooltip, on="key", how="left")
+    df_receita = df_graph[["dia", "receita"]].copy()
+    df_receita["key"] = df_receita["dia"] + "|receita"
+    df_receita = df_receita.merge(df_tooltip, on="key", how="left")
 
     adicionar_barra(
         fig,
         list(range(len(dias))),
-        df_receitas["receitas"],
-        "receitas",
-        CORES["receitas"],
-        criar_hover_text(df_receitas, "receitas", "receitas", df_tooltip),
+        df_receita["receita"],
+        "receita",
+        CORES["receita"],
+        criar_hover_text(df_receita, "receita", "receita", df_tooltip),
         offset=offset_inicial
     )
 
-    df_essencial = df_graph[["dia", "despesas essenciais"]].copy()
-    df_essencial["key"] = df_essencial["dia"] + "|despesas essenciais"
+    df_essencial = df_graph[["dia", "essencial"]].copy()
+    df_essencial["key"] = df_essencial["dia"] + "|essencial"
     df_essencial = df_essencial.merge(df_tooltip, on="key", how="left")
 
     adicionar_barra(
         fig,
         list(range(len(dias))),
-        df_essencial["despesas essenciais"],
-        "despesas essenciais",
-        CORES["despesas essenciais"],
-        criar_hover_text(df_essencial, "despesas essenciais", "despesas essenciais", df_tooltip),
+        df_essencial["essencial"],
+        "essencial",
+        CORES["essencial"],
+        criar_hover_text(df_essencial, "essencial", "essencial", df_tooltip),
         offset=offset_inicial + espacamento
     )
 
-    df_livres = df_graph[["dia", "despesas livres"]].copy()
-    df_livres["key"] = df_livres["dia"] + "|despesas livres"
+    df_livres = df_graph[["dia", "livre"]].copy()
+    df_livres["key"] = df_livres["dia"] + "|livre"
     df_livres = df_livres.merge(df_tooltip, on="key", how="left")
 
     adicionar_barra(
         fig,
         list(range(len(dias))),
-        df_livres["despesas livres"],
-        "despesas livres",
-        CORES["despesas livres"],
-        criar_hover_text(df_livres, "despesas livres", "despesas livres", df_tooltip),
+        df_livres["livre"],
+        "livre",
+        CORES["livre"],
+        criar_hover_text(df_livres, "livre", "livre", df_tooltip),
         offset=offset_inicial + espacamento * 2
     )
 
-    df_invest = df_graph[["dia", "investimentos"]].copy()
-    df_invest["key"] = df_invest["dia"] + "|investimentos"
+    df_invest = df_graph[["dia", "investimento"]].copy()
+    df_invest["key"] = df_invest["dia"] + "|investimento"
     df_invest = df_invest.merge(df_tooltip, on="key", how="left")
 
     adicionar_barra(
         fig,
         list(range(len(dias))),
-        df_invest["investimentos"],
-        "investimentos",
-        CORES["investimentos"],
-        criar_hover_text(df_invest, "investimentos", "investimentos", df_tooltip),
+        df_invest["investimento"],
+        "investimento",
+        CORES["investimento"],
+        criar_hover_text(df_invest, "investimento", "investimento", df_tooltip),
         offset=offset_inicial + espacamento * 3
     )
 
@@ -215,16 +215,16 @@ def criar_grafico_barras(df, df_graph):
     return fig
 
 def criar_grafico_pizza(totais):
-    labels = ["despesas essenciais", "despesas livres", "investimentos"]
+    labels = ["essencial", "livre", "investimento"]
     values = [totais["essencial"], totais["livre"], totais["investimento"]]
 
     soma = sum(values)
-    if soma < totais["receitas"]:
+    if soma < totais["receita"]:
         labels.append("não atribuído")
-        values.append(totais["receitas"] - soma)
+        values.append(totais["receita"] - soma)
 
     data = pd.DataFrame({"Categoria": labels, "Valor": values})
-    data["Porcentagem"] = (data["Valor"] / totais["receitas"] * 100).round(1)
+    data["Porcentagem"] = (data["Valor"] / totais["receita"] * 100).round(1)
 
     hover_text = [
         f"<b>Categoria:</b> {cat}<br><b>Valor total (R$):</b> {val:,.2f}<br><b>Percentual:</b> {pct:.2f}%"
@@ -241,7 +241,7 @@ def criar_grafico_pizza(totais):
     )])
 
     fig.update_layout(
-        title={'text': "Distribuição das saídas em relação ao total de receitas", 'x': 0.5, 'xanchor': 'center'},
+        title={'text': "Distribuição das saídas", 'x': 0.5, 'xanchor': 'center'},
         **LAYOUT_CONFIG
     )
 
@@ -251,10 +251,10 @@ def exibir_metricas(totais, autonomo):
     emergency_fund = totais["essencial"] * (12 if autonomo else 6)
 
     cols = st.columns(5, border=True)
-    cols[0].metric("Receitas", f"R$ {totais['receitas']:.2f}")
+    cols[0].metric("receita", f"R$ {totais['receita']:.2f}")
     cols[1].metric("Gastos essenciais", f"R$ {totais['essencial']:.2f}")
     cols[2].metric("Gastos livres", f"R$ {totais['livre']:.2f}")
-    cols[3].metric("Investimentos", f"R$ {totais['investimento']:.2f}")
+    cols[3].metric("investimento", f"R$ {totais['investimento']:.2f}")
     cols[4].metric(
         "Reserva de emergência",
         f"R$ {emergency_fund:.2f}",
