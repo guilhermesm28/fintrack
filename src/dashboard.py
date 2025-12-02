@@ -251,10 +251,10 @@ def exibir_metricas(totais, autonomo):
     emergency_fund = totais["essencial"] * (12 if autonomo else 6)
 
     cols = st.columns(5, border=True)
-    cols[0].metric("receita", f"R$ {totais['receita']:.2f}")
+    cols[0].metric("Receitas", f"R$ {totais['receita']:.2f}")
     cols[1].metric("Gastos essenciais", f"R$ {totais['essencial']:.2f}")
     cols[2].metric("Gastos livres", f"R$ {totais['livre']:.2f}")
-    cols[3].metric("investimento", f"R$ {totais['investimento']:.2f}")
+    cols[3].metric("Investimentos", f"R$ {totais['investimento']:.2f}")
     cols[4].metric(
         "Reserva de emergência",
         f"R$ {emergency_fund:.2f}",
