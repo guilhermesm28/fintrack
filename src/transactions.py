@@ -229,7 +229,9 @@ try:
             a.updated_at
         FROM public.transactions a
         INNER JOIN public.categories b ON a.category_id = b.id
-        WHERE a.user_id = {st.session_state["user_id"]}
+        WHERE 1=1
+            AND a.user_id = {st.session_state["user_id"]}
+            AND a.is_active = TRUE
         ORDER BY a.due_day
     """
     df = select(query)
